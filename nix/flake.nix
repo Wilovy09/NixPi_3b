@@ -29,9 +29,9 @@
       };  
     };  
 
-    packages.aarch64-linux = {
+    packages.armv7l-linux = {
       sdcard = nixos-generators.nixosGenerate {
-        system = "aarch64-linux";
+        system = "armv7l-linux";
         format = "sd-aarch64";
         modules = [
           ./extra-config.nix
