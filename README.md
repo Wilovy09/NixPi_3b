@@ -1,6 +1,7 @@
 # Instalando NixOS en una Pi 3 B+
 
 1. Instalamos el `.img` de Raspbian
+
     - Podemos usar `rpi-imager` o descargar directamente la [iso](https://www.raspberrypi.com/software/operating-systems/) que queremos.
     - Si decidimos descargarla nosotros mismos hay que seguir los siguientes pasos:
     - Descomprimir el `.img.xz` para obtener un `.img`
@@ -12,15 +13,15 @@
 $> nix-shell -p ouch
 $> ouch decompress NOMBRE_DE_LA_IMAGEN.img.xz
 ```
-    
-    - Esto nos generara un archivo `.img`
-    - Ahora tenemos que cargarlo a nuestra micro sd, para eso usamos el comando y esperamos a que termine
+
+- Esto nos generara un archivo `.img`
+- Ahora tenemos que cargarlo a nuestra micro sd, para eso usamos el comando y esperamos a que termine
 
 ```bash
 $> sudo dd if=2024-11-19-raspios-bookworm-armhf.img of=/dev/sdb bs=4M status=progress
 ```
 
-    - Ahora insertamos nuestra micro sd a nuestra Pi 3 B+
+- Ahora insertamos nuestra micro sd a nuestra Pi 3 B+
 
 2. Conectarnos a internet.
 3. Instalamos:
