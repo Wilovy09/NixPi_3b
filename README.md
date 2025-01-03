@@ -73,9 +73,9 @@ $> curl -L https://nixos.org/nix/install | sh
       };  
     };  
 
-    packages.aarch64-linux = {
+    packages.armv7l-linux = {
       sdcard = nixos-generators.nixosGenerate {
-        system = "aarch64-linux";
+        system = "armv7l-linux";
         format = "sd-aarch64";
         modules = [
           ./extra-config.nix
@@ -113,5 +113,39 @@ experimental-features = nix-command flakes
 8. Ahora si corremos el siguiente comando a la altura de nuestro `flake.nix`
 
 ```bash
-$> nix build .#packages.aarch64-linux.sdcard
+$> export NIXPGS_ALLOW_UNSOPPORTED_SYSTEM=1 && nix build .#packages.armv7l-linux.sdcard --impure
 ```
+
+> [!NOTE]
+> Hasta aqui he llegado porque mi micro sd se quedo sin espacio.
+
+9. Ahora tenemos que cargar ese `.img` que se genero en nuestra micro sd e iniciar la raspberry pi
+
+```bash
+$> sudo -s
+$> nix-channel --update
+$> nixos-generate-config
+$> nano /etc/nixos/configuration.nix
+```
+
+10. Modificamos la configuración de nix
+
+    - Activamos el SSH
+    - Definimos un usuario
+
+11. Cambiamos la contraseña 
+
+```bash
+$> passwd USER_DEFINIDO
+```
+
+12. Rebuildeamos
+
+```bash
+$> nixos-rebuild switch
+```
+
+---
+
+[video de donde se saco info](https://www.youtube.com/watch?v=VIuPRL6Ucgk&t=223s)
+
