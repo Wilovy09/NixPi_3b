@@ -23,13 +23,18 @@ $> sudo dd if=2024-11-19-raspios-bookworm-armhf.img of=/dev/sdb bs=4M status=pro
     - Ahora insertamos nuestra micro sd a nuestra Pi 3 B+
 
 2. Conectarnos a internet.
-3. Instalamos `nix-bin`
+3. Instalamos:
+
+> [!NOTE]
+> Esto puede tardar unos minutos
 
 ```bash
-$> sudo apt install nix-bin
+$> sudo apt install curl xz-utils git
+$> curl -L https://nixos.org/nix/install | sh
 ```
 
-4. Creamos un archivo `flake.nix` con el siguiente contenido:
+4. Cerramos y volvemos a abrir la terminal
+5. Creamos un archivo `flake.nix` con el siguiente contenido:
 
 ```nix
 {
@@ -78,7 +83,7 @@ $> sudo apt install nix-bin
 }
 ```
 
-5. Creamos otro archivo `extra-config.nix`
+6. Creamos otro archivo `extra-config.nix`
 
 ```nix
 { config, lib, pkgs, ... }:
