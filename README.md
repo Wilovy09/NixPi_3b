@@ -33,7 +33,12 @@ $> sudo apt install curl xz-utils git
 $> curl -L https://nixos.org/nix/install | sh
 ```
 
-4. Cerramos y volvemos a abrir la terminal
+4. Copiamos el comando que nos aparece al final de la instalación de nix:
+
+```bash
+. /home/wilovy/.nix-profile/etc/profile.d/nix.sh
+```
+
 5. Creamos un archivo `flake.nix` con el siguiente contenido:
 
 ```nix
@@ -97,4 +102,16 @@ $> curl -L https://nixos.org/nix/install | sh
 
   services.openssh.enable = true;
 }
+```
+
+7. Creamos un archivo `~/.config/nix/nix.conf`
+
+```conf
+experimental-features = nix-command flakes
+```
+
+8. Ahora si corremos el siguiente comando a la altura de nuestro `flake.nix`
+
+```bash
+$> nix build .#packages.aarch64-linux.sdcard
 ```
