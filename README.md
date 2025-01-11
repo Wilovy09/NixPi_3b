@@ -114,7 +114,7 @@ experimental-features = nix-command flakes
 8. Ahora si corremos el siguiente comando a la altura de nuestro `flake.nix`
 
 ```bash
-$> export NIXPGS_ALLOW_UNSOPPORTED_SYSTEM=1 && nix build .#packages.armv7l-linux.sdcard --impure
+$> NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nix build --impure .#packages.armv7l-linux.sdcard
 ```
 
 > [!NOTE]
