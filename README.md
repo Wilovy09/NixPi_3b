@@ -72,7 +72,7 @@ curl -L https://nixos.org/nix/install | sh
           admin = {
             password = "admin123";
             isNormalUser = true;
-            extraGroups = ["wheel"];
+            extraGroups = ["wheel" "networkmanager"];
           };
         };
       };
@@ -104,7 +104,7 @@ curl -L https://nixos.org/nix/install | sh
   nix.settings.experimental-features = ["nix-command" "flakes"];
   nixpkgs.config.allowUnsupportedSystem = true;
   nixpkgs.config.allowUnfree = true;
-  nvironment.systemPackages = with pkgs; [
+  environment.systemPackages = with pkgs; [
     vim
     git
     wpa_supplicant
