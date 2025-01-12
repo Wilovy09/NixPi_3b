@@ -8,8 +8,12 @@
     };
   };
 
-  outputs = { self, nixpkgs, nixos-generators, ... }:
-  {
+  outputs = {
+    self,
+    nixpkgs,
+    nixos-generators,
+    ...
+  }: {
     nixosModules = {
       system = {
         disabledModules = [
@@ -17,21 +21,21 @@
         ];
 
         system.stateVersion = "24.11";
-      };  
+      };
       users = {
         users.users = {
           admin = {
             password = "admin123";
             isNormalUser = true;
-            extraGroups = [ "wheel" ];
+            extraGroups = ["wheel"];
           };
         };
-      };  
-    };  
+      };
+    };
 
-    packages.armv7l-linux = {
+    packages.aarch64-linux = {
       sdcard = nixos-generators.nixosGenerate {
-        system = "armv7l-linux";
+        system = "aarch64-linux";
         format = "sd-aarch64";
         modules = [
           ./extra-config.nix
@@ -42,4 +46,3 @@
     };
   };
 }
-
