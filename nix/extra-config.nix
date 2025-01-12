@@ -6,7 +6,7 @@
   nix.settings.experimental-features = ["nix-command" "flakes"];
   nixpkgs.config.allowUnsupportedSystem = true;
   nixpkgs.config.allowUnfree = true;
-  nvironment.systemPackages = with pkgs; [
+  environment.systemPackages = with pkgs; [
     vim
     git
     wpa_supplicant

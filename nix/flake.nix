@@ -27,7 +27,7 @@
           admin = {
             password = "admin123";
             isNormalUser = true;
-            extraGroups = ["wheel"];
+            extraGroups = ["wheel" "networkmanager"];
           };
         };
       };
