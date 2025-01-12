@@ -10,15 +10,15 @@
 > Recomiendo usar [ouch](https://github.com/ouch-org/ouch)
 
 ```bash
-$> nix-shell -p ouch
-$> ouch decompress NOMBRE_DE_LA_IMAGEN.img.xz
+nix-shell -p ouch
+ouch decompress NOMBRE_DE_LA_IMAGEN.img.xz
 ```
 
 - Esto nos generara un archivo `.img`
 - Ahora tenemos que cargarlo a nuestra micro sd, para eso usamos el comando y esperamos a que termine
 
 ```bash
-$> sudo dd if=2024-11-19-raspios-bookworm-armhf.img of=/dev/sdb bs=4M status=progress
+sudo dd if=2024-11-19-raspios-bookworm-armhf.img of=/dev/sdb bs=4M status=progress
 ```
 
 - Ahora insertamos nuestra micro sd a nuestra Pi 3 B+
@@ -30,8 +30,8 @@ $> sudo dd if=2024-11-19-raspios-bookworm-armhf.img of=/dev/sdb bs=4M status=pro
 > Esto puede tardar unos minutos
 
 ```bash
-$> sudo apt install curl xz-utils git
-$> curl -L https://nixos.org/nix/install | sh
+sudo apt install curl xz-utils git
+curl -L https://nixos.org/nix/install | sh
 ```
 
 4. Copiamos el comando que nos aparece al final de la instalación de nix:
@@ -53,8 +53,12 @@ $> curl -L https://nixos.org/nix/install | sh
     };
   };
 
-  outputs = { self, nixpkgs, nixos-generators, ... }:
-  {
+  outputs = {
+    self,
+    nixpkgs,
+    nixos-generators,
+    ...
+  }: {
     nixosModules = {
       system = {
         disabledModules = [
@@ -62,21 +66,21 @@ $> curl -L https://nixos.org/nix/install | sh
         ];
 
         system.stateVersion = "24.11";
-      };  
+      };
       users = {
         users.users = {
           admin = {
             password = "admin123";
             isNormalUser = true;
-            extraGroups = [ "wheel" ];
+            extraGroups = ["wheel"];
           };
         };
-      };  
-    };  
+      };
+    };
 
-    packages.armv7l-linux = {
+    packages.aarch64-linux = {
       sdcard = nixos-generators.nixosGenerate {
-        system = "armv7l-linux";
+        system = "aarch64-linux";
         format = "sd-aarch64";
         modules = [
           ./extra-config.nix
@@ -92,16 +96,32 @@ $> curl -L https://nixos.org/nix/install | sh
 6. Creamos otro archivo `extra-config.nix`
 
 ```nix
-{ config, lib, pkgs, ... }:
-{
+{pkgs, ...}: {
   networking.firewall.enable = false;
+  networking.networkmanager.enable = true;
+  networking.firewall.allowedTCPPorts = [22];
 
+  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nixpkgs.config.allowUnsupportedSystem = true;
   nixpkgs.config.allowUnfree = true;
-  environment.systemPackages = with pkgs; [
-       openssh
+  nvironment.systemPackages = with pkgs; [
+    vim
+    git
+    wpa_supplicant
+    openssh
   ];
 
-  services.openssh.enable = true;
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 2 * 1024;
+    }
+  ];
+
+  services.openssh = {
+    enable = true;
+    ports = [22];
+  };
 }
 ```
 
@@ -114,7 +134,7 @@ experimental-features = nix-command flakes
 8. Ahora si corremos el siguiente comando a la altura de nuestro `flake.nix`
 
 ```bash
-$> NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nix build --impure .#packages.armv7l-linux.sdcard
+NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nix build --impure .#packages.aarch64-linux.sdcard
 ```
 
 > [!NOTE]
@@ -123,10 +143,10 @@ $> NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nix build --impure .#packages.armv7l-linux
 9. Ahora tenemos que cargar ese `.img` que se genero en nuestra micro sd e iniciar la raspberry pi
 
 ```bash
-$> sudo -s
-$> nix-channel --update
-$> nixos-generate-config
-$> nano /etc/nixos/configuration.nix
+sudo -s
+nix-channel --update
+nixos-generate-config
+nano /etc/nixos/configuration.nix
 ```
 
 10. Modificamos la configuración de nix
@@ -137,13 +157,13 @@ $> nano /etc/nixos/configuration.nix
 11. Cambiamos la contraseña 
 
 ```bash
-$> passwd USER_DEFINIDO
+passwd USER_DEFINIDO
 ```
 
 12. Rebuildeamos
 
 ```bash
-$> nixos-rebuild switch
+nixos-rebuild switch
 ```
 
 ---
