@@ -4,13 +4,10 @@
   networking.firewall.allowedTCPPorts = [22];
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
-  nixpkgs.config.allowUnsupportedSystem = true;
   nixpkgs.config.allowUnfree = true;
   environment.systemPackages = with pkgs; [
-    vim
-    git
-    wpa_supplicant
     openssh
+    vim
   ];
 
   swapDevices = [
