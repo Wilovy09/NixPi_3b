@@ -157,6 +157,12 @@ nixos-generate-config
 > [!NOTE]
 > Si ocupamos conectarnos con wifi lo hacemos con `nmtui`.
 
+10. Actualizamos
+
+```bash
+sudo nix-channel --upgrade
+```
+
 > [!NOTE]
 > Esto puede tardar varios minutos
 
@@ -164,26 +170,66 @@ nixos-generate-config
 sudo nixos-rebuild switch -I nixos-config=/etc/nixos/configuration.nix
 ```
 
-10. Modificamos la configuración de nix
+11. Modificamos la configuración de nix
 
 ```nix
-# Agregar config
+{pkgs, ...}: {
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
+  boot.loader.grub.enable = false;
+  boot.loader.generic-extlinux-compatible.enable = true;
+
+  networking.hostName = "nixrpi";
+  networking.networkmanager.enable = true;
+
+  time.timeZone = "America/Monterrey";
+
+  users.users.wilovy = {
+    isNormalUser = true;
+    extraGroups = ["wheel" "networkmanager" "docker"];
+  };
+
+  i18n.defaultLocale = "en_US.UTF-8";
+
+  services.openssh = {
+    enable = true;
+    ports = [22];
+  };
+
+  services.dbus.enable = true;
+
+  networking.firewall.allowedTCPPorts = [22];
+
+  swapDevices = [
+    {
+      device = "/swapfile";
+      size = 3 * 1024;
+    }
+  ];
+
+  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nixpkgs.config.allowUnfree = true;
+  environment.systemPackages = with pkgs; [
+    vim
+    curl
+    git
+    gh
+  ];
+
+  system.stateVersion = "25.05";
+}
 ```
 
-11. Rebuildeamos
+12. Rebuildeamos
 
 ```bash
 sudo nixos-rebuild switch -I nixos-config=/etc/nixos/configuration.nix
 ```
 
-12. Cambiamos la contraseña de nuestro nuevo usuario
+13. Cambiamos la contraseña de nuestro nuevo usuario
 
 ```bash
 passwd USER_DEFINIDO
 ```
-
----
-
-[video de donde se saco info](https://www.youtube.com/watch?v=VIuPRL6Ucgk&t=223s)
-
