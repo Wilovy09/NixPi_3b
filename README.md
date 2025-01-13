@@ -34,7 +34,7 @@ sudo dphys-swapfile swapon
 sudo reboot
 ```
 
-## Instalación de NixOS
+## Generando `.img` de NixOS
 
 ```bash
 sudo apt install curl xz-utils git
@@ -96,7 +96,7 @@ experimental-features = nix-command flakes
 
     packages.aarch64-linux = {
       sdcard = nixos-generators.nixosGenerate {
-        system = "x86_64-linux";
+        system = "aarch64-linux";
         format = "sd-aarch64";
         modules = [
           ./extra-config.nix
@@ -167,8 +167,8 @@ sudo nixos-rebuild switch -I nixos-config=/etc/nixos/configuration.nix
 10. Modificamos la configuración de nix
 
 ```nix
-
 # Agregar config
+
 ```
 
 11. Rebuildeamos
