@@ -10,6 +10,13 @@
     vim
   ];
 
+  services.polkit.enable = true;
+  services.dbus = {
+    enable = true;
+    systemBus = true;
+    sessionBus = true;
+  };
+
   swapDevices = [
     {
       device = "/swapfile";
