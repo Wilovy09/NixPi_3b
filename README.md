@@ -123,12 +123,10 @@ experimental-features = nix-command flakes
     openssh
     vim
   ];
-
-  services.polkit.enable = true;
+  
+  security.polkit.enable = true;
   services.dbus = {
     enable = true;
-    systemBus = true;
-    sessionBus = true;
   };
 
   swapDevices = [
