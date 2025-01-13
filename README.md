@@ -124,6 +124,13 @@ experimental-features = nix-command flakes
     vim
   ];
 
+  services.polkit.enable = true;
+  services.dbus = {
+    enable = true;
+    systemBus = true;
+    sessionBus = true;
+  };
+
   swapDevices = [
     {
       device = "/swapfile";
@@ -193,14 +200,17 @@ sudo nixos-rebuild switch -I nixos-config=/etc/nixos/configuration.nix
 
   i18n.defaultLocale = "en_US.UTF-8";
 
+  networking.firewall.allowedTCPPorts = [22];
   services.openssh = {
     enable = true;
     ports = [22];
   };
-
-  services.dbus.enable = true;
-
-  networking.firewall.allowedTCPPorts = [22];
+  services.polkit.enable = true;
+  services.dbus = {
+    enable = true;
+    systemBus = true;
+    sessionBus = true;
+  };
 
   swapDevices = [
     {
