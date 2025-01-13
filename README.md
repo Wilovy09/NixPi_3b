@@ -203,11 +203,10 @@ sudo nixos-rebuild switch -I nixos-config=/etc/nixos/configuration.nix
     enable = true;
     ports = [22];
   };
-  services.polkit.enable = true;
+  
+  security.polkit.enable = true;
   services.dbus = {
     enable = true;
-    systemBus = true;
-    sessionBus = true;
   };
 
   swapDevices = [
